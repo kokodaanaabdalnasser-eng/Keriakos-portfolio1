@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Keriakos Nasser — Full Stack Developer</title>
+<meta name="description" content="Keriakos Nasser — Full Stack Developer. Building fast, scalable web applications."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --ink:#08080f;--ink2:#0d0d18;--ink3:#141422;--ink4:#1c1c2e;
+  --lime:#c8ff00;--lime2:#a8d900;
+  --white:#f4f4ff;--off:#b0b0c8;--dim:#404060;
+  --border:rgba(255,255,255,0.05);
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden;cursor:none;}
+::selection{background:rgba(200,255,0,0.2);}
+
+/* ── CUSTOM CURSOR ── */
+.cursor{width:10px;height:10px;background:var(--lime);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s;}
+.cursor-ring{width:36px;height:36px;border:1px solid rgba(200,255,0,.35);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .18s ease;}
+
+/* ── AI BACKGROUND ── */
+canvas#bg{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+/* ── SPLASH ── */
+#splash{
+  position:fixed;inset:0;z-index:800;background:var(--ink);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  overflow:hidden;
+}
+#splashCv{position:absolute;inset:0;width:100%;height:100%;}
+.sp-wrap{position:relative;z-index:2;text-align:center;padding:2rem;}
+.sp-tag{
+  font-family:'JetBrains Mono',monospace;font-size:.65rem;
+  letter-spacing:.3em;color:var(--lime);text-transform:uppercase;
+  opacity:0;animation:riseUp .6s .4s both;
+}
+.sp-big{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(4rem,10vw,8rem);line-height:.92;letter-spacing:.02em;
+  opacity:0;animation:riseUp .7s .9s both;margin-top:1rem;
+}
+.sp-big span{color:var(--lime);}
+.sp-sub{
+  font-size:.85rem;color:var(--off);letter-spacing:.12em;
+  opacity:0;animation:riseUp .6s 1.4s both;margin-top:.85rem;
+}
+.sp-line{
+  width:1px;height:0;background:var(--lime);margin:2.5rem auto 0;
+  opacity:0;animation:lineGrow .8s 1.9s both;
+}
+@keyframes riseUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:none;}}
+@keyframes lineGrow{from{opacity:0;height:0;}to{opacity:1;height:60px;}}
+#splash.out{animation:splashFade .85s forwards;}
+@keyframes splashFade{to{opacity:0;transform:scale(1.03);}}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;height:58px;z-index:300;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 3rem;border-bottom:1px solid var(--border);
+  background:rgba(8,8,15,.82);backdrop-filter:blur(24px);
+}
+.nl{
+  font-family:'Bebas Neue',sans-serif;font-size:1.45rem;
+  letter-spacing:.05em;color:var(--white);cursor:pointer;
+  transition:color .2s;
+}
+.nl span{color:var(--lime);}
+.nl:hover{color:var(--lime);}
+.nm{display:flex;gap:0;list-style:none;}
+.nm a{
+  font-size:.78rem;font-weight:500;color:var(--off);text-decoration:none;
+  padding:.28rem .9rem;border-radius:5px;transition:all .2s;cursor:pointer;
+  letter-spacing:.04em;
+}
+.nm a:hover,.nm a.on{color:var(--lime);}
+.adm-btn{
+  font-family:'JetBrains Mono',monospace;font-size:.68rem;
+  color:var(--dim);background:transparent;border:1px solid var(--dim);
+  border-radius:5px;padding:.28rem .8rem;cursor:pointer;transition:all .2s;
+  letter-spacing:.04em;
+}
+.adm-btn:hover{border-color:var(--lime);color:var(--lime);}
+
+/* ── PAGES ── */
+.pg{display:none;min-height:100vh;padding-top:58px;position:relative;z-index:1;}
+.pg.on{display:block;}
+
+/* ── HOME ── */
+.home-outer{
+  min-height:calc(100vh - 58px);display:flex;flex-direction:column;
+  justify-content:space-between;padding:0 3rem;
+}
+.home-mid{
+  display:grid;grid-template-columns:1fr 400px;align-items:center;
+  gap:4rem;padding:3rem 0;
+}
+.h-num{
+  font-family:'JetBrains Mono',monospace;font-size:.68rem;
+  color:var(--dim);letter-spacing:.15em;margin-bottom:1.5rem;
+}
+.home-mid h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(4rem,7vw,6.5rem);line-height:.92;
+  letter-spacing:.02em;margin-bottom:1.75rem;
+}
+.home-mid h1 .gl{color:var(--lime);display:block;}
+.h-avail{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-family:'JetBrains Mono',monospace;font-size:.68rem;
+  color:var(--lime);letter-spacing:.1em;margin-bottom:1.25rem;
+}
+.h-avail-dot{
+  width:6px;height:6px;border-radius:50%;background:var(--lime);
+  animation:blink 2s infinite;
+}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+.h-para{
+  color:var(--off);font-size:.93rem;line-height:1.8;
+  max-width:420px;margin-bottom:2.5rem;font-weight:300;
+}
+.h-btns{display:flex;gap:.75rem;margin-bottom:3.5rem;flex-wrap:wrap;}
+.b-main{
+  background:var(--lime);color:var(--ink);font-weight:700;
+  font-size:.82rem;border:none;border-radius:6px;padding:.72rem 1.65rem;
+  cursor:pointer;transition:all .2s;letter-spacing:.03em;font-family:'Outfit',sans-serif;
+}
+.b-main:hover{background:#d4ff1a;transform:translateY(-2px);}
+.b-ghost{
+  background:transparent;color:var(--white);font-size:.82rem;font-weight:500;
+  border:1px solid var(--dim);border-radius:6px;padding:.72rem 1.65rem;
+  cursor:pointer;transition:all .2s;font-family:'Outfit',sans-serif;
+}
+.b-ghost:hover{border-color:var(--lime);color:var(--lime);}
+.h-nums{display:flex;gap:3.5rem;}
+.hn-v{
+  font-family:'Bebas Neue',sans-serif;font-size:2.4rem;
+  color:var(--white);line-height:1;
+}
+.hn-v span{color:var(--lime);}
+.hn-l{font-size:.68rem;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-top:.2rem;}
+
+/* Avatar Card */
+.av-box{
+  background:rgba(13,13,24,0.9);border:1px solid var(--border);
+  border-radius:18px;padding:2rem;position:relative;overflow:hidden;
+  backdrop-filter:blur(8px);
+}
+.av-box::before{
+  content:'';position:absolute;top:-80px;right:-80px;
+  width:250px;height:250px;
+  background:radial-gradient(circle,rgba(200,255,0,.07) 0%,transparent 70%);
+  pointer-events:none;
+}
+.av-circle{
+  width:76px;height:76px;border-radius:50%;
+  background:var(--ink3);border:2px solid var(--dim);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:1.7rem;
+  color:var(--lime);margin-bottom:1.1rem;position:relative;
+}
+.av-ping{
+  position:absolute;bottom:3px;right:3px;width:13px;height:13px;
+  background:#22c55e;border-radius:50%;border:2px solid var(--ink2);
+}
+.av-name{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.04em;margin-bottom:.2rem;}
+.av-role{font-size:.75rem;color:var(--off);letter-spacing:.06em;margin-bottom:1.3rem;}
+.av-chips{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1.5rem;}
+.chip{
+  font-size:.67rem;background:rgba(200,255,0,.06);
+  border:1px solid rgba(200,255,0,.18);color:var(--lime);
+  border-radius:4px;padding:.18rem .55rem;
+  font-family:'JetBrains Mono',monospace;
+}
+.av-divider{height:1px;background:var(--border);margin-bottom:1.25rem;}
+.av-mono{font-family:'JetBrains Mono',monospace;font-size:.7rem;line-height:1.95;color:var(--dim);}
+.av-mono .k{color:var(--lime);}
+.av-mono .v{color:var(--off);}
+
+/* Home Bottom Bar */
+.h-bar{
+  border-top:1px solid var(--border);padding:1.25rem 0;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.h-bar-l{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--dim);}
+.h-bar-r{display:flex;gap:1.75rem;}
+.h-soc{font-size:.72rem;color:var(--off);cursor:pointer;transition:color .2s;text-decoration:none;}
+.h-soc:hover{color:var(--lime);}
+
+/* ── ABOUT ── */
+.sec{max-width:1020px;margin:0 auto;padding:5rem 3rem;}
+.sec-tag{
+  font-family:'JetBrains Mono',monospace;font-size:.65rem;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--lime);margin-bottom:.65rem;
+}
+.sec h2{
+  font-family:'Bebas Neue',sans-serif;font-size:3.5rem;
+  letter-spacing:.03em;margin-bottom:3rem;line-height:1;
+}
+.ab-grid{display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;}
+.ab-txt{color:var(--off);font-size:.91rem;line-height:1.85;font-weight:300;}
+.ab-txt p{margin-bottom:1.1rem;}
+.ab-txt strong{color:var(--white);font-weight:500;}
+.sk-title{
+  font-family:'JetBrains Mono',monospace;font-size:.63rem;
+  letter-spacing:.15em;color:var(--dim);text-transform:uppercase;margin-bottom:.9rem;
+}
+.sk-grid{display:grid;grid-template-columns:1fr 1fr;gap:.45rem;}
+.sk-item{
+  display:flex;align-items:center;gap:.55rem;font-size:.8rem;color:var(--off);
+  padding:.55rem .8rem;background:var(--ink2);border:1px solid var(--border);
+  border-radius:6px;transition:all .2s;
+}
+.sk-item:hover{border-color:rgba(200,255,0,.22);color:var(--white);}
+.sk-item::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--lime);flex-shrink:0;}
+.xp-list{margin-top:2.5rem;display:flex;flex-direction:column;gap:.6rem;}
+.xp-item{
+  padding:1rem 1.25rem;background:var(--ink2);
+  border:1px solid var(--border);border-left:2px solid var(--lime);
+  border-radius:0 8px 8px 0;
+}
+.xp-role{font-size:.88rem;font-weight:500;margin-bottom:.25rem;}
+.xp-meta{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--dim);}
+
+/* ── PROJECTS ── */
+.pr-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.pr-card{
+  background:rgba(13,13,24,0.85);border:1px solid var(--border);
+  border-radius:14px;padding:1.85rem;transition:all .3s;
+  position:relative;overflow:hidden;cursor:pointer;
+  backdrop-filter:blur(6px);
+}
+.pr-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:transparent;transition:background .3s;
+}
+.pr-card:hover{border-color:rgba(200,255,0,.22);transform:translateY(-3px);}
+.pr-card:hover::before{background:var(--lime);}
+.pr-idx{
+  font-family:'JetBrains Mono',monospace;font-size:.62rem;
+  color:var(--dim);margin-bottom:1.1rem;letter-spacing:.1em;
+}
+.pr-card h3{
+  font-family:'Bebas Neue',sans-serif;font-size:1.45rem;
+  letter-spacing:.03em;margin-bottom:.6rem;
+}
+.pr-card p{color:var(--off);font-size:.84rem;line-height:1.65;margin-bottom:1.4rem;font-weight:300;}
+.pr-tags{display:flex;flex-wrap:wrap;gap:.38rem;}
+.pr-tag{
+  font-size:.65rem;background:var(--ink3);border:1px solid var(--dim);
+  border-radius:4px;padding:.2rem .55rem;color:var(--dim);
+  font-family:'JetBrains Mono',monospace;
+}
+.pr-arrow{position:absolute;top:1.5rem;right:1.5rem;font-size:.95rem;color:var(--dim);transition:all .25s;}
+.pr-card:hover .pr-arrow{color:var(--lime);transform:translate(2px,-2px);}
+
+/* ── CONTACT ── */
+.ct-grid{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:start;}
+.ct-left h3{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:.03em;margin-bottom:.65rem;}
+.ct-left p{color:var(--off);font-size:.88rem;line-height:1.8;margin-bottom:2rem;font-weight:300;}
+.ct-links{display:flex;flex-direction:column;gap:.55rem;}
+.ct-link{
+  display:flex;align-items:center;gap:.85rem;padding:.72rem 1rem;
+  background:var(--ink2);border:1px solid var(--border);border-radius:9px;
+  text-decoration:none;color:var(--white);transition:all .2s;
+}
+.ct-link:hover{border-color:rgba(200,255,0,.25);color:var(--lime);}
+.ct-icon{
+  width:34px;height:34px;background:var(--ink3);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--dim);flex-shrink:0;
+}
+.ct-lbl{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--dim);display:block;margin-bottom:.12rem;}
+.ct-val{font-size:.83rem;}
+.ct-form{background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:2rem;}
+.fg{margin-bottom:1rem;}
+.fg label{
+  display:block;font-family:'JetBrains Mono',monospace;font-size:.62rem;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:.42rem;
+}
+.fg input,.fg textarea{
+  width:100%;background:var(--ink3);border:1px solid var(--dim);
+  border-radius:6px;padding:.65rem .9rem;color:var(--white);
+  font-size:.85rem;font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s;
+}
+.fg textarea{height:95px;resize:none;}
+.fg input:focus,.fg textarea:focus{border-color:var(--lime);}
+.fg input::placeholder,.fg textarea::placeholder{color:var(--dim);}
+.sub-btn{
+  width:100%;background:var(--lime);color:var(--ink);border:none;
+  border-radius:7px;padding:.8rem;font-weight:700;font-size:.85rem;
+  cursor:pointer;transition:all .2s;letter-spacing:.03em;font-family:'Outfit',sans-serif;
+}
+.sub-btn:hover{background:#d4ff1a;transform:translateY(-1px);}
+.ok-msg{
+  display:none;margin-top:.9rem;padding:.78rem;
+  background:rgba(200,255,0,.06);border:1px solid rgba(200,255,0,.22);
+  border-radius:6px;color:var(--lime);text-align:center;
+  font-size:.78rem;font-family:'JetBrains Mono',monospace;
+}
+
+/* ── FOOTER ── */
+footer.sf{
+  border-top:1px solid var(--border);padding:1.4rem 3rem;
+  display:flex;justify-content:space-between;align-items:center;
+  position:relative;z-index:1;
+}
+.sf-l{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--dim);}
+.sf-r{font-size:.72rem;color:var(--dim);cursor:pointer;transition:color .2s;}
+.sf-r:hover{color:var(--lime);}
+
+/* ── ADMIN ── */
+.adm-wrap{max-width:860px;margin:0 auto;padding:3rem 2.5rem;}
+.adm-hd{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  margin-bottom:2.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);
+}
+.adm-ttl{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;letter-spacing:.04em;margin-bottom:.25rem;}
+.adm-meta{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--dim);}
+.back-site{
+  font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--dim);
+  background:transparent;border:1px solid var(--dim);border-radius:5px;
+  padding:.32rem .8rem;cursor:pointer;transition:all .2s;
+}
+.back-site:hover{border-color:var(--lime);color:var(--lime);}
+.adm-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:2rem;}
+.a-stat{
+  background:var(--ink2);border:1px solid var(--border);
+  border-radius:10px;padding:1.15rem;text-align:center;
+}
+.a-stat-n{font-family:'Bebas Neue',sans-serif;font-size:2.1rem;color:var(--lime);line-height:1;}
+.a-stat-l{
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;
+  color:var(--dim);margin-top:.28rem;letter-spacing:.08em;text-transform:uppercase;
+}
+.inbox-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem;}
+.inbox-ttl{
+  font-family:'Bebas Neue',sans-serif;font-size:1.15rem;
+  letter-spacing:.04em;display:flex;align-items:center;gap:.6rem;
+}
+.ib-badge{
+  background:var(--lime);color:var(--ink);font-size:.62rem;
+  font-weight:700;padding:.12rem .5rem;border-radius:50px;
+  font-family:'JetBrains Mono',monospace;
+}
+.clr-btn{
+  font-family:'JetBrains Mono',monospace;font-size:.65rem;
+  color:var(--dim);background:transparent;border:1px solid var(--dim);
+  border-radius:5px;padding:.28rem .72rem;cursor:pointer;transition:all .2s;
+}
+.clr-btn:hover{border-color:#ef4444;color:#ef4444;}
+.msgs-list{display:flex;flex-direction:column;gap:.7rem;}
+.m-item{background:var(--ink2);border:1px solid var(--border);border-radius:10px;padding:1.25rem;}
+.m-item.nm{border-color:rgba(200,255,0,.25);}
+.m-row{display:flex;align-items:center;gap:.65rem;margin-bottom:.6rem;flex-wrap:wrap;}
+.m-name{font-weight:500;font-size:.88rem;}
+.m-new{
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;
+  background:rgba(200,255,0,.1);color:var(--lime);
+  border:1px solid rgba(200,255,0,.25);border-radius:3px;padding:.1rem .42rem;
+}
+.m-email{font-size:.76rem;color:var(--dim);}
+.m-date{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--dim);}
+.m-subj{font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--lime);margin-bottom:.4rem;}
+.m-body{font-size:.85rem;color:var(--off);line-height:1.65;font-weight:300;}
+.m-rep{
+  margin-top:.75rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;
+  color:var(--dim);background:transparent;border:1px solid var(--dim);
+  border-radius:4px;padding:.25rem .68rem;cursor:pointer;transition:all .2s;
+}
+.m-rep:hover{border-color:var(--lime);color:var(--lime);}
+.empty-box{
+  text-align:center;padding:4rem 2rem;color:var(--dim);
+  font-size:.85rem;line-height:1.9;font-family:'JetBrains Mono',monospace;
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
+<canvas id="bg"></canvas>
+
+<!-- ══ SPLASH ══ -->
+<div id="splash">
+  <canvas id="splashCv"></canvas>
+  <div class="sp-wrap">
+    <div class="sp-tag">// welcome to the portfolio of</div>
+    <div class="sp-big">Keriakos<br/><span>Nasser</span></div>
+    <div class="sp-sub">Full Stack Developer</div>
+    <div class="sp-line"></div>
+  </div>
+</div>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <div class="nl" onclick="goPage('home')">Keriakos<span>.</span></div>
+  <ul class="nm">
+    <li><a onclick="goPage('home')" class="on" id="nv-home">Home</a></li>
+    <li><a onclick="goPage('about')" id="nv-about">About</a></li>
+    <li><a onclick="goPage('projects')" id="nv-projects">Projects</a></li>
+    <li><a onclick="goPage('contact')" id="nv-contact">Contact</a></li>
+  </ul>
+  <button class="adm-btn" onclick="goPage('admin')">admin_panel</button>
+</nav>
+
+<!-- ══ HOME ══ -->
+<div class="pg on" id="pg-home">
+  <div class="home-outer">
+    <div class="home-mid">
+      <div>
+        <div class="h-avail"><span class="h-avail-dot"></span> available_for_work</div>
+        <div class="h-num">// 001 — INTRODUCTION</div>
+        <h1>Full Stack<br/>Dev<span class="gl">eloper.</span></h1>
+        <p class="h-para">Building fast, scalable web applications with clean architecture — from database design to pixel-perfect interfaces. Based in Egypt, working globally.</p>
+        <div class="h-btns">
+          <button class="b-main" onclick="goPage('projects')">View Projects →</button>
+          <button class="b-ghost" onclick="goPage('contact')">Let's Talk</button>
+        </div>
+        <div class="h-nums">
+          <div><div class="hn-v">10<span>+</span></div><div class="hn-l">Projects</div></div>
+          <div><div class="hn-v">3<span>+</span></div><div class="hn-l">Years Exp.</div></div>
+          <div><div class="hn-v">∞</div><div class="hn-l">Clean Code</div></div>
+        </div>
+      </div>
+      <div class="av-box">
+        <div class="av-circle">KN<div class="av-ping"></div></div>
+        <div class="av-name">Keriakos Nasser</div>
+        <div class="av-role">Full Stack Developer · Egypt</div>
+        <div class="av-chips">
+          <span class="chip">available</span>
+          <span class="chip">freelance</span>
+          <span class="chip">remote</span>
+        </div>
+        <div class="av-divider"></div>
+        <div class="av-mono">
+          <div style="color:var(--dim);margin-bottom:.35rem;">// core_stack</div>
+          <div><span class="k">frontend</span> → <span class="v">React, Next.js</span></div>
+          <div><span class="k">backend &nbsp;</span>→ <span class="v">Node.js, Python</span></div>
+          <div><span class="k">database</span> → <span class="v">PostgreSQL, Mongo</span></div>
+          <div><span class="k">devops &nbsp;</span>→ <span class="v">Docker, Linux</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="h-bar">
+      <span class="h-bar-l">© 2025 Keriakos Nasser — All rights reserved</span>
+      <div class="h-bar-r">
+        <a class="h-soc" href="https://github.com/" target="_blank">GitHub</a>
+        <a class="h-soc" href="https://linkedin.com/" target="_blank">LinkedIn</a>
+        <a class="h-soc" href="https://wa.me/" target="_blank">WhatsApp</a>
+        <a class="h-soc" href="mailto:hello@keriakos.dev">Email</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ABOUT ══ -->
+<div class="pg" id="pg-about">
+  <div class="sec">
+    <div class="sec-tag">// 002 — About</div>
+    <h2>Who I Am.</h2>
+    <div class="ab-grid">
+      <div>
+        <div class="ab-txt">
+          <p>أنا Keriakos Nasser — مطور Full Stack بيبني تطبيقات ويب من الصفر. بشتغل على كل طبقة في الـ stack: من architecture الـ database لحد آخر pixel في الـ UI.</p>
+          <p>بحب <strong>الكود النظيف</strong>، الأداء العالي، وتجربة المستخدم الاحترافية. بتعامل مع كل مشروع بجدية وشفافية كاملة من أول يوم.</p>
+          <p>بشتغل مع clients من كل العالم — من الـ planning لحد الـ deployment وما بعده.</p>
+        </div>
+        <div class="xp-list">
+          <div class="xp-item">
+            <div class="xp-role">Full Stack Developer — Freelance</div>
+            <div class="xp-meta">2022 – Present · Remote / Global</div>
+          </div>
+          <div class="xp-item">
+            <div class="xp-role">Web Developer</div>
+            <div class="xp-meta">2021 – 2022 · Egypt</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="sk-title">// technical_skills</div>
+        <div class="sk-grid">
+          <div class="sk-item">React.js</div><div class="sk-item">Next.js</div>
+          <div class="sk-item">Node.js</div><div class="sk-item">Python</div>
+          <div class="sk-item">TypeScript</div><div class="sk-item">FastAPI</div>
+          <div class="sk-item">PostgreSQL</div><div class="sk-item">MongoDB</div>
+          <div class="sk-item">Docker</div><div class="sk-item">Linux CLI</div>
+          <div class="sk-item">REST APIs</div><div class="sk-item">Git/GitHub</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="sf">
+    <span class="sf-l">// keriakos.dev — about</span>
+    <span class="sf-r" onclick="goPage('projects')">Next: Projects →</span>
+  </footer>
+</div>
+
+<!-- ══ PROJECTS ══ -->
+<div class="pg" id="pg-projects">
+  <div class="sec">
+    <div class="sec-tag">// 003 — Work</div>
+    <h2>Selected Projects.</h2>
+    <div class="pr-grid">
+      <div class="pr-card">
+        <span class="pr-arrow">↗</span>
+        <div class="pr-idx">001 — WEB APP</div>
+        <h3>E-Commerce Platform</h3>
+        <p>Full-featured online store with real-time inventory management, Stripe payments integration, and a complete admin dashboard for store management.</p>
+        <div class="pr-tags"><span class="pr-tag">React</span><span class="pr-tag">Node.js</span><span class="pr-tag">MongoDB</span><span class="pr-tag">Stripe</span></div>
+      </div>
+      <div class="pr-card">
+        <span class="pr-arrow">↗</span>
+        <div class="pr-idx">002 — SAAS</div>
+        <h3>Task Management System</h3>
+        <p>Team collaboration platform with real-time updates via WebSockets, Kanban boards, role-based access control, and detailed progress tracking.</p>
+        <div class="pr-tags"><span class="pr-tag">Next.js</span><span class="pr-tag">Socket.io</span><span class="pr-tag">PostgreSQL</span><span class="pr-tag">Redis</span></div>
+      </div>
+      <div class="pr-card">
+        <span class="pr-arrow">↗</span>
+        <div class="pr-idx">003 — BACKEND</div>
+        <h3>RESTful API Service</h3>
+        <p>Production-grade API service with JWT authentication, rate limiting, auto-generated Swagger docs, and comprehensive test coverage.</p>
+        <div class="pr-tags"><span class="pr-tag">Python</span><span class="pr-tag">FastAPI</span><span class="pr-tag">Docker</span><span class="pr-tag">Redis</span></div>
+      </div>
+      <div class="pr-card">
+        <span class="pr-arrow">↗</span>
+        <div class="pr-idx">004 — DASHBOARD</div>
+        <h3>Analytics Dashboard</h3>
+        <p>Interactive data visualization platform translating complex datasets into clean, actionable charts and business intelligence reports.</p>
+        <div class="pr-tags"><span class="pr-tag">React</span><span class="pr-tag">D3.js</span><span class="pr-tag">GraphQL</span><span class="pr-tag">TypeScript</span></div>
+      </div>
+    </div>
+  </div>
+  <footer class="sf">
+    <span class="sf-l">// keriakos.dev — projects</span>
+    <span class="sf-r" onclick="goPage('contact')">Start a project →</span>
+  </footer>
+</div>
+
+<!-- ══ CONTACT ══ -->
+<div class="pg" id="pg-contact">
+  <div class="sec">
+    <div class="sec-tag">// 004 — Contact</div>
+    <h2>Let's Build Together.</h2>
+    <div class="ct-grid">
+      <div class="ct-left">
+        <h3>Open to Opportunities</h3>
+        <p>Whether it's a full project, a quick consultation, or a long-term collaboration — I'm always happy to hear new ideas. I reply within 24 hours.</p>
+        <div class="ct-links">
+          <a class="ct-link" href="mailto:hello@keriakos.dev">
+            <div class="ct-icon">@</div>
+            <div><span class="ct-lbl">Email</span><span class="ct-val">hello@keriakos.dev</span></div>
+          </a>
+          <a class="ct-link" href="https://linkedin.com/in/keriakos" target="_blank">
+            <div class="ct-icon">in</div>
+            <div><span class="ct-lbl">LinkedIn</span><span class="ct-val">linkedin.com/in/keriakos</span></div>
+          </a>
+          <a class="ct-link" href="https://github.com/keriakos" target="_blank">
+            <div class="ct-icon">gh</div>
+            <div><span class="ct-lbl">GitHub</span><span class="ct-val">github.com/keriakos</span></div>
+          </a>
+          <a class="ct-link" href="https://wa.me/20xxxxxxxxx" target="_blank">
+            <div class="ct-icon">wa</div>
+            <div><span class="ct-lbl">WhatsApp</span><span class="ct-val">+20 xxx xxx xxxx</span></div>
+          </a>
+        </div>
+      </div>
+      <div class="ct-form">
+        <div class="fg"><label>Full Name</label><input id="fn" type="text" placeholder="Your name"/></div>
+        <div class="fg"><label>Email</label><input id="fe" type="email" placeholder="your@email.com"/></div>
+        <div class="fg"><label>Subject</label><input id="fs" type="text" placeholder="Project idea, collab..."/></div>
+        <div class="fg"><label>Message</label><textarea id="fm" placeholder="Tell me about your project..."></textarea></div>
+        <button class="sub-btn" onclick="submitMsg()">Send Message →</button>
+        <div class="ok-msg" id="okMsg">// message_sent → I'll get back to you soon.</div>
+      </div>
+    </div>
+  </div>
+  <footer class="sf">
+    <span class="sf-l">// keriakos.dev — contact</span>
+    <span class="sf-r" onclick="goPage('home')">↑ Back to top</span>
+  </footer>
+</div>
+
+<!-- ══ ADMIN ══ -->
+<div class="pg" id="pg-admin">
+  <div class="adm-wrap">
+    <div class="adm-hd">
+      <div>
+        <div class="adm-ttl">Admin Dashboard</div>
+        <div class="adm-meta">// keriakos_nasser · private_panel</div>
+      </div>
+      <button class="back-site" onclick="goPage('home')">← back_to_site</button>
+    </div>
+    <div class="adm-grid">
+      <div class="a-stat"><div class="a-stat-n" id="sTot">0</div><div class="a-stat-l">Total Msgs</div></div>
+      <div class="a-stat"><div class="a-stat-n" id="sUnr">0</div><div class="a-stat-l">Unread</div></div>
+      <div class="a-stat"><div class="a-stat-n">4</div><div class="a-stat-l">Projects</div></div>
+      <div class="a-stat"><div class="a-stat-n" id="sTdy">0</div><div class="a-stat-l">Today</div></div>
+    </div>
+    <div class="inbox-row">
+      <div class="inbox-ttl">Inbox <span class="ib-badge" id="iBadge">0</span></div>
+      <button class="clr-btn" onclick="clearMsgs()">clear_all</button>
+    </div>
+    <div class="msgs-list" id="msgsList">
+      <div class="empty-box">// no_messages_yet<br/>Messages from the contact form will appear here.</div>
+    </div>
+  </div>
+  <footer class="sf">
+    <span class="sf-l">// admin_panel · keriakos.dev</span>
+    <span class="sf-r" onclick="goPage('contact')">Contact Page →</span>
+  </footer>
+</div>
+
+<script>
+/* ── Custom Cursor ── */
+var cur=document.getElementById('cur'),curR=document.getElementById('curR');
+document.addEventListener('mousemove',function(e){
+  cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';
+  setTimeout(function(){curR.style.left=e.clientX+'px';curR.style.top=e.clientY+'px';},80);
+});
+document.addEventListener('mousedown',function(){cur.style.transform='translate(-50%,-50%) scale(1.8)';});
+document.addEventListener('mouseup',function(){cur.style.transform='translate(-50%,-50%) scale(1)';});
+
+/* ── AI Neural Background ── */
+var bc=document.getElementById('bg'),bx=bc.getContext('2d'),bn=[],bW,bH;
+function rsz(){bW=bc.width=window.innerWidth;bH=bc.height=window.innerHeight;}
+rsz();window.addEventListener('resize',function(){rsz();mkN();});
+function mkN(){
+  bn=[];
+  var c=Math.min(Math.floor(bW*bH/22000),55);
+  for(var i=0;i<c;i++)bn.push({x:Math.random()*bW,y:Math.random()*bH,vx:(Math.random()-.5)*.28,vy:(Math.random()-.5)*.28,r:Math.random()*1.4+.6,p:Math.random()*Math.PI*2});
+}mkN();
+(function loop(){
+  bx.clearRect(0,0,bW,bH);
+  for(var i=0;i<bn.length;i++){
+    for(var j=i+1;j<bn.length;j++){
+      var d=Math.hypot(bn[i].x-bn[j].x,bn[i].y-bn[j].y);
+      if(d<125){bx.beginPath();bx.strokeStyle='rgba(200,255,0,'+(1-d/125)*.09+')';bx.lineWidth=.38;bx.moveTo(bn[i].x,bn[i].y);bx.lineTo(bn[j].x,bn[j].y);bx.stroke();}
+    }
+  }
+  for(var i=0;i<bn.length;i++){
+    var n=bn[i];n.p+=.016;var g=Math.sin(n.p)*.4+.6;
+    bx.beginPath();bx.arc(n.x,n.y,n.r,0,Math.PI*2);
+    bx.fillStyle='rgba(200,255,0,'+(g*.6)+')';bx.fill();
+    n.x+=n.vx;n.y+=n.vy;
+    if(n.x<0||n.x>bW)n.vx*=-1;if(n.y<0||n.y>bH)n.vy*=-1;
+  }
+  requestAnimationFrame(loop);
+})();
+
+/* ── Splash Neural ── */
+var sc=document.getElementById('splashCv'),sx=sc.getContext('2d'),sn=[];
+function rsp(){sc.width=window.innerWidth;sc.height=window.innerHeight;}rsp();
+for(var i=0;i<65;i++)sn.push({x:Math.random()*sc.width,y:Math.random()*sc.height,vx:(Math.random()-.5)*.42,vy:(Math.random()-.5)*.42,r:Math.random()*2+.8,p:Math.random()*Math.PI*2});
+var spOn=true;
+(function sloop(){
+  if(!spOn)return;
+  sx.clearRect(0,0,sc.width,sc.height);
+  for(var i=0;i<sn.length;i++){
+    for(var j=i+1;j<sn.length;j++){
+      var d=Math.hypot(sn[i].x-sn[j].x,sn[i].y-sn[j].y);
+      if(d<145){sx.beginPath();sx.strokeStyle='rgba(200,255,0,'+(1-d/145)*.22+')';sx.lineWidth=.5;sx.moveTo(sn[i].x,sn[i].y);sx.lineTo(sn[j].x,sn[j].y);sx.stroke();}
+    }
+  }
+  for(var i=0;i<sn.length;i++){
+    var n=sn[i];n.p+=.02;var g=Math.sin(n.p)*.45+.55;
+    sx.beginPath();sx.arc(n.x,n.y,n.r,0,Math.PI*2);
+    sx.fillStyle='rgba(200,255,0,'+(g*.85)+')';sx.fill();
+    n.x+=n.vx;n.y+=n.vy;
+    if(n.x<0||n.x>sc.width)n.vx*=-1;if(n.y<0||n.y>sc.height)n.vy*=-1;
+  }
+  requestAnimationFrame(sloop);
+})();
+setTimeout(function(){
+  spOn=false;
+  var sp=document.getElementById('splash');
+  sp.classList.add('out');
+  setTimeout(function(){sp.style.display='none';},900);
+},4200);
+
+/* ── Page Navigation ── */
+var msgs=[];
+function goPage(id){
+  document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});
+  document.querySelectorAll('.nm a').forEach(function(a){a.classList.remove('on');});
+  document.getElementById('pg-'+id).classList.add('on');
+  var nv=document.getElementById('nv-'+id);if(nv)nv.classList.add('on');
+  if(id==='admin')renderAdmin();
+  window.scrollTo(0,0);
+}
+
+/* ── Contact Form ── */
+function submitMsg(){
+  var n=document.getElementById('fn').value.trim(),
+      e=document.getElementById('fe').value.trim(),
+      s=document.getElementById('fs').value.trim(),
+      m=document.getElementById('fm').value.trim();
+  if(!n||!e||!m){alert('Please fill in all required fields.');return;}
+  var now=new Date(),
+      ds=now.toLocaleDateString('en-GB')+' '+now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  msgs.unshift({n:n,e:e,s:s||'(no subject)',m:m,d:ds,isNew:true,today:true});
+  ['fn','fe','fs','fm'].forEach(function(x){document.getElementById(x).value='';});
+  var ok=document.getElementById('okMsg');
+  ok.style.display='block';
+  setTimeout(function(){ok.style.display='none';},4000);
+}
+
+/* ── Admin Panel ── */
+function renderAdmin(){
+  var tot=msgs.length,
+      unr=msgs.filter(function(x){return x.isNew;}).length,
+      tdy=msgs.filter(function(x){return x.today;}).length;
+  document.getElementById('sTot').textContent=tot;
+  document.getElementById('sUnr').textContent=unr;
+  document.getElementById('sTdy').textContent=tdy;
+  document.getElementById('iBadge').textContent=tot;
+  var el=document.getElementById('msgsList');
+  if(!tot){
+    el.innerHTML='<div class="empty-box">// no_messages_yet<br/>Messages from the contact form will appear here.</div>';
+    return;
+  }
+  el.innerHTML=msgs.map(function(x){
+    return '<div class="m-item'+(x.isNew?' nm':'')+'">'+
+      '<div class="m-row">'+
+        '<span class="m-name">'+x.n+'</span>'+
+        (x.isNew?'<span class="m-new">NEW</span>':'')+
+        '<span class="m-email">'+x.e+'</span>'+
+        '<span class="m-date">'+x.d+'</span>'+
+      '</div>'+
+      '<div class="m-subj">// '+x.s+'</div>'+
+      '<div class="m-body">'+x.m+'</div>'+
+      '<button class="m-rep" onclick="window.location.href=\'mailto:'+x.e+'\'">reply →</button>'+
+    '</div>';
+  }).join('');
+  msgs.forEach(function(x){x.isNew=false;});
+}
+
+function clearMsgs(){
+  if(!msgs.length)return;
+  if(confirm('Delete all messages?')){msgs=[];renderAdmin();}
+}
+</script>
+</body>
+</html>
